@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+**IMPORTANT: For this app to work you require api keys that you can get [here](https://developer.marvel.com/)** \
+**Please substitute them in the [here](src/constants.js)**
+
+## Details
+Developer: Bart Wagrowski ([e-mail](mailto:bartlomiej.wagrowski@gmail.com))\
+Project Title: Marvel Library \
+Thoughts: project can be improved with the use of Redux to remember the search params.
+
 ## Available Scripts
 
 In the project directory, you can run:

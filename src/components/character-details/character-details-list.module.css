@@ -1,0 +1,7 @@
+.listItem {
+    margin-bottom: 2px;
+}
+
+.listContainer {
+    list-style-position: inside;
+}
