@@ -13,6 +13,10 @@ jest.mock('../../../api/marvel-api', () => ({
 }));
 
 describe('useCharacterDetailsState hook', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     it('should initialise correctly if the data call succeeds', async () => {
         getCharacterDetails.mockResolvedValue({ data: { results: [{ foo: 'bar' }] } });
         const { result } = renderHook(() => useCharacterDetailsState());
@@ -23,6 +27,7 @@ describe('useCharacterDetailsState hook', () => {
 
         expect(result.current.error).toBeNull();
         expect(result.current.isLoading).toBeFalsy();
+        expect(getCharacterDetails).toBeCalledWith('A12345');
     });
 
     it('should initialise correctly if the data call errors', async () => {
