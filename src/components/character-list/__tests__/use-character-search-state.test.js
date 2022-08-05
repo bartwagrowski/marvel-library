@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import useCharacterSearchState from '../use-character-search-state';
 import { getMarvelCharacters } from '../../../api/marvel-api';
 
@@ -51,6 +51,88 @@ describe('useCharacterSearchState hook', () => {
             {
                 param: 'limit',
                 value: 10,
+            },
+            {
+                param: 'offset',
+                value: 0,
+            },
+        ]);
+    });
+
+    it('should call the service correctly when the search is triggered', async () => {
+        getMarvelCharacters.mockResolvedValue({ data: { total: 102, results: [{ foo: 'bar' }] } });
+        const { result } = renderHook(() => useCharacterSearchState());
+
+        await act(() => {
+            result.current.onSearch('foobar');
+        });
+
+        expect(getMarvelCharacters).toBeCalledWith([
+            {
+                param: 'limit',
+                value: 10,
+            },
+            {
+                param: 'offset',
+                value: 0,
+            },
+            { param: 'nameStartsWith', value: 'foobar' },
+        ]);
+    });
+
+    it('should call the service correctly when the sorting is applied', async () => {
+        getMarvelCharacters.mockResolvedValue({ data: { total: 102, results: [{ foo: 'bar' }] } });
+        const { result } = renderHook(() => useCharacterSearchState());
+
+        await act(() => {
+            result.current.onSort('-name');
+        });
+
+        expect(getMarvelCharacters).toBeCalledWith([
+            {
+                param: 'limit',
+                value: 10,
+            },
+            {
+                param: 'offset',
+                value: 0,
+            },
+            { param: 'orderBy', value: '-name' },
+        ]);
+    });
+
+    it('should call the service correctly when the result page is changed', async () => {
+        getMarvelCharacters.mockResolvedValue({ data: { total: 102, results: [{ foo: 'bar' }] } });
+        const { result } = renderHook(() => useCharacterSearchState());
+
+        await act(() => {
+            result.current.onPageChange(null, 3);
+        });
+
+        expect(getMarvelCharacters).toBeCalledWith([
+            {
+                param: 'limit',
+                value: 10,
+            },
+            {
+                param: 'offset',
+                value: 30,
+            },
+        ]);
+    });
+
+    it('should call the service correctly when the rows per page are changed', async () => {
+        getMarvelCharacters.mockResolvedValue({ data: { total: 102, results: [{ foo: 'bar' }] } });
+        const { result } = renderHook(() => useCharacterSearchState());
+
+        await act(() => {
+            result.current.onRowsPerPageChange({ target: { value: 100 } });
+        });
+
+        expect(getMarvelCharacters).toBeCalledWith([
+            {
+                param: 'limit',
+                value: 100,
             },
             {
                 param: 'offset',
